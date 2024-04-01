@@ -18,7 +18,8 @@ export async function HandleUrlPostRequest(req, res) {
             VisitedInfo: []
         });
         
-        res.json({ id: shortIdGenerated });
+        res.render('home',{id:shortIdGenerated});
+        // res.json({ id: shortIdGenerated });
     } catch (error) {
         console.error("Error creating URL document:", error);
         res.status(500).json({ error: "Internal server error" });

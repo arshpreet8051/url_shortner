@@ -1,10 +1,9 @@
 import express from "express";
 import {HandleUrlPostRequest,HandleUrlGetAnalytics} from "../controllers/post_url.js";
 
-export const Router = express.Router();
+export const urlRouter = express.Router();
 
-Router.post("/",HandleUrlPostRequest);
-
-Router.get("/:shortId",HandleUrlGetAnalytics);
+urlRouter.post("/",HandleUrlPostRequest);
+urlRouter.get("/:shortId",HandleUrlGetAnalytics);
 // export{Router};
 

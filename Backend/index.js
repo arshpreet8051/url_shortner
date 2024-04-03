@@ -1,7 +1,8 @@
 import express, { urlencoded } from "express";
 import {connect} from "./connect.js";
-
-import {URLmodel} from "./modules/model.js";
+import {URLmodel} from "./models/model.js";
+import {restrictToLoggedUsersOnly,checkAuth} from './middleware/auth.js';
+import cookieParser from 'cookie-parser';
 
 import {urlRouter} from "./routes/url.js";
 import {staticRouter} from "./routes/staticRoutre.js";
@@ -22,18 +23,22 @@ connect("mongodb://127.0.0.1:27017/short-url")
 
 const PORT = 8001;
 
+// Middlewares
 app.use(express.json());
-app.use(urlencoded({exyended:false}));
+app.use(urlencoded({extended:false}));
+app.use(cookieParser());
 
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
 
-app.get("/",staticRouter);
-app.get("/getURLs",staticRouter);
-app.get("/signup",staticRouter);
+app.use("/",checkAuth,staticRouter);
+//app.use("/getURLs",staticRouter);
+//app.get("/signup",staticRouter);
+//app.get("/login",staticRouter);
 
-app.use("/url", urlRouter);
-app.use("/analytics",urlRouter);
+// Note : use of inline middleware 
+app.use("/url",restrictToLoggedUsersOnly,urlRouter);
+//app.use("/analytics",urlRouter);
 app.use("/user",userRouter);
 
 // app.get("/",(req,res)=>{

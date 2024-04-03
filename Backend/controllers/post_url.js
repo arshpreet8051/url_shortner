@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { URLmodel } from "../modules/model.js";
+import { URLmodel } from "../models/model.js";
 
 export async function HandleUrlPostRequest(req, res) {
     const body = req.body;
@@ -15,7 +15,8 @@ export async function HandleUrlPostRequest(req, res) {
         await URLmodel.create({
             ShortId: shortIdGenerated,
             RedirectUrl: body.url,
-            VisitedInfo: []
+            VisitedInfo: [],
+            createdBy:req.user._id
         });
         
         res.render('home',{id:shortIdGenerated});
